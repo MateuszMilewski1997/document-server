@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace fakultet.Models
 {
-    public class Users
+    public class User
     {
 
         [Key] [Column(TypeName = "int")] public int? Id { get; set; }

@@ -24,9 +24,18 @@ namespace fakultet.Controllers
 
         // GET: api/Users
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Users>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<UsersDTO>>> GetUsers()
         {
-            return await _context.Users.ToListAsync();
+
+            List<UsersDTO> UserDetailsDTO = new List<UsersDTO>();
+            var users = await _context.Users.ToListAsync();
+
+            foreach (User adv in users)
+                UserDetailsDTO.Add(new UsersDTO(adv));
+
+
+            return UserDetailsDTO;
+            //return await _context.Users.ToListAsync();
         }
 
         // GET: api/Users/5
@@ -47,7 +56,7 @@ namespace fakultet.Controllers
 
             return usersDTO;
         }
-
+        /*
         // PUT: api/Users/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutUsers(int id, Users users)
@@ -76,17 +85,39 @@ namespace fakultet.Controllers
             }
 
             return NoContent();
-        }
+        }*/
+
 
         // POST: api/Users
         [HttpPost]
-        public async Task<ActionResult<Users>> PostUsers(RegistrationCOM registrationCOM)
+        public async Task<ActionResult<User>> PostUsers(RegistrationCOM registrationCOM)
         {
-            int roleNumber = 2;
-            if (registrationCOM.Role == "admin")
-              roleNumber = 1;
+            int roleNumber = 0;
 
-            Users user = new Users()
+            if (registrationCOM.Role == "admin")
+            {
+                roleNumber = 1;
+            }
+            else if(registrationCOM.Role == "urzednik")
+            {
+                roleNumber = 2;
+            }
+            else if (registrationCOM.Role == "petent")
+            {
+                roleNumber = 3;
+            }
+            else if (registrationCOM.Role == "skargi")
+            {
+                roleNumber = 4;
+            }
+            else if (registrationCOM.Role == "podania")
+            {
+                roleNumber = 5;
+            }
+
+
+
+            User user = new User()
             {
                 Id = null,
                 Login = registrationCOM.Login,
@@ -103,7 +134,7 @@ namespace fakultet.Controllers
 
         // DELETE: api/Users/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Users>> DeleteUsers(int id)
+        public async Task<ActionResult<User>> DeleteUsers(int id)
         {
             var users = await _context.Users.FindAsync(id);
             if (users == null)
@@ -122,4 +153,9 @@ namespace fakultet.Controllers
             return _context.Users.Any(e => e.Id == id);
         }
     }
+
+
+    
+
+
 }
