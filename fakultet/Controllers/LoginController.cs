@@ -14,22 +14,41 @@ using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 using fakultet.DTO;
 
+
 namespace fakultet.Controllers
 {
+
+       
+
+
     [Route("api/[controller]")]
     [ApiController]
     public class LoginController : ControllerBase
     {
-        private readonly DatabaseContext _context;
 
-        public LoginController(DatabaseContext context)
+
+       
+        private readonly DatabaseContext _context;
+       // private readonly IMapper _mapper;
+
+        public LoginController(DatabaseContext context/*, IMapper mapper*/)
         {
             _context = context;
+          //  _mapper = mapper;
         }
 
+
+
+        //private readonly DatabaseContext _context;
+
+        //public LoginController(DatabaseContext context)
+        //{
+         //   _context = context;
+       // }
+
         // POST: api/Users - Logowanie
-        [HttpGet]
-        public async Task<ActionResult> GetAccount(LoginCOM loginCOM)
+        [HttpPost]
+        public async Task<ActionResult> PostAccount(LoginCOM loginCOM)
         {
             Users user = await _context.Users.SingleOrDefaultAsync(x =>
                x.Login == loginCOM.Login && x.Password == loginCOM.Password
@@ -38,16 +57,18 @@ namespace fakultet.Controllers
             if (user == null)
                 return BadRequest(new { message = "Invalid credentials." });
 
-            string securityKey = "super_top-Security^KEY-03*03*2019.smesk.io";
+
+           string securityKey = "super_top-Security^KEY-03*03*2019.smesk.io";
             var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(securityKey));
             var signingCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256Signature);
 
-            Roles Role = await _context.Roles.SingleOrDefaultAsync(x => x.Id == user.Role);
+
+          
 
              var claim = new[] {
-                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                    new Claim(ClaimTypes.Role, Role.Role_Name)
-             };
+                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
+            };
+
 
             var token = new JwtSecurityToken(
                 issuer: "smesk.in",
@@ -57,9 +78,21 @@ namespace fakultet.Controllers
                 claims: claim
                 );
 
-            LoginDTO usersDTO = new LoginDTO(user, token);
+            UsersDTO usersDTO = new UsersDTO(user, token)
+            {
+                Login = user.Login,
+                Email = user.Email,
+                Token = token,
+                Role_Name = user.Role
+            };
 
+
+            //UsersDTO userDTO = Mapper.Map<UsersDTO>(user);
+            //userDTO.Token = new JwtSecurityTokenHandler().WriteToken(token);
+
+            //return Ok(userDTO);
             return Ok(usersDTO);
+           // return ("zalogowano");
         }
     }
 }

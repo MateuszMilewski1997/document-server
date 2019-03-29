@@ -11,5 +11,6 @@ namespace fakultet.Models
 
         public DbSet<Users> Users { get; set; }
         public DbSet<Roles> Roles { get; set; }
+        public DbSet<Documents> Documents { get; set; }
     }
 }

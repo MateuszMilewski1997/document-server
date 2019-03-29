@@ -12,6 +12,6 @@ namespace fakultet.Models
         [Required] [Column(TypeName = "varchar(40)")] public string Email { get; set; }
         [Required] [Column(TypeName = "int")] public int Role { get; set; }
 
-        [Required] [ForeignKey("Role")] public Roles Roles { get; set; }
+        [Required] [ForeignKey("Role")] public Roles roles {get; set;}
     }
 }
