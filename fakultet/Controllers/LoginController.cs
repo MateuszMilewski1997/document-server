@@ -28,8 +28,8 @@ namespace fakultet.Controllers
         }
 
         // POST: api/Users - Logowanie
-        [HttpPost]
-        public async Task<ActionResult> PostAccount(LoginCOM loginCOM)
+        [HttpGet]
+        public async Task<ActionResult> GetAccount(LoginCOM loginCOM)
         {
             Users user = await _context.Users.SingleOrDefaultAsync(x =>
                x.Login == loginCOM.Login && x.Password == loginCOM.Password
