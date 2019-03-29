@@ -56,6 +56,19 @@ namespace fakultet.Controllers
         public async Task<ActionResult<Users>> PostUsers(RegistrationCOM registrationCOM)
         {
             Roles Role = await _context.Roles.SingleOrDefaultAsync(x => x.Role_Name == registrationCOM.Role);
+            if(Role == null)
+                return BadRequest(new { message = "Role name doesn't exist" });
+
+            Users UserLogin = await _context.Users.SingleOrDefaultAsync(x => x.Login == registrationCOM.Login);
+            if (UserLogin != null)
+                return BadRequest(new { message = "Login or e-mail exits in databse" });
+
+            Users UserEmail = await _context.Users.SingleOrDefaultAsync(x => x.Email == registrationCOM.Email);
+            if (UserEmail != null)
+                return BadRequest(new { message = "Login or e-mail exits in databse" });
+
+            if(registrationCOM.Password.Length < 8)
+                return BadRequest(new { message = "Password must have minimum 8 characters" });
 
             Users user = new Users()
             {
