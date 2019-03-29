@@ -38,12 +38,15 @@ namespace fakultet.Controllers
             if (user == null)
                 return BadRequest(new { message = "Invalid credentials." });
 
-           string securityKey = "super_top-Security^KEY-03*03*2019.smesk.io";
+            string securityKey = "super_top-Security^KEY-03*03*2019.smesk.io";
             var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(securityKey));
             var signingCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256Signature);
 
+            Roles Role = await _context.Roles.SingleOrDefaultAsync(x => x.Id == user.Role);
+
              var claim = new[] {
-                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
+                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                    new Claim(ClaimTypes.Role, Role.Role_Name)
              };
 
             var token = new JwtSecurityToken(
