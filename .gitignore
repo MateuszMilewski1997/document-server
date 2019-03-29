@@ -347,3 +347,4 @@ MigrationBackup/
 
 bin
 obj
+Migrations
