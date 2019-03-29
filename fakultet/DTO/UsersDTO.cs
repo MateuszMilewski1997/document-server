@@ -8,25 +8,15 @@ namespace fakultet.DTO
 {
     public class UsersDTO
     {
-       // private User adv;
-
-        public UsersDTO()
+        public UsersDTO(Users user)
         {
-            
-        }
-
-        public UsersDTO(User adv)
-       {
-            Id = adv.Id;
-            Login = adv.Login;
-            Email = adv.Email;
-            //this.adv = adv;
+            Id = user.Id;
+            Login = user.Login;
+            Email = user.Email;
         }
 
         public int? Id { get; set; }
         public string Login { get; set; }
         public string Email { get; set; }
-
-        
     }
 }

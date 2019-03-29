@@ -1,8 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace fakultet.Models
 {
@@ -13,7 +9,7 @@ namespace fakultet.Models
 
         }
 
-        public DbSet<User> Users { get; set; }
+        public DbSet<Users> Users { get; set; }
         public DbSet<Roles> Roles { get; set; }
     }
 }

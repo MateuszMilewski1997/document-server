@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using fakultet.Models;
@@ -22,75 +20,40 @@ namespace fakultet.Controllers
             _context = context;
         }
 
-        // GET: api/Users
+        // GET: api/Users - pobieranie całej lisy userów
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UsersDTO>>> GetUsers()
         {
-
             List<UsersDTO> UserDetailsDTO = new List<UsersDTO>();
             var users = await _context.Users.ToListAsync();
 
-            foreach (User adv in users)
-                UserDetailsDTO.Add(new UsersDTO(adv));
-
+            foreach (Users user in users)
+                UserDetailsDTO.Add(new UsersDTO(user));
 
             return UserDetailsDTO;
-            //return await _context.Users.ToListAsync();
         }
 
-        // GET: api/Users/5
+        // GET: api/Users/5 - pobieranie e-maila i loginu danego usera
         [HttpGet("{id}")]
         public async Task<ActionResult<UsersDTO>> GetUsers(int id)
         {
-            var users = await _context.Users.FindAsync(id);
+            Users user = await _context.Users.FindAsync(id);
 
-            if (users == null)
+            if (user == null)
                 return NotFound();
 
-            UsersDTO usersDTO = new UsersDTO()
+            UsersDTO usersDTO = new UsersDTO(user)
             {
-                Id = users.Id,
-                Login = users.Login,
-                Email = users.Email
+                Login = user.Login,
+                Email = user.Email
             };
 
             return usersDTO;
         }
-        /*
-        // PUT: api/Users/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutUsers(int id, Users users)
-        {
-            if (id != users.Id)
-            {
-                return BadRequest();
-            }
 
-            _context.Entry(users).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UsersExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }*/
-
-
-        // POST: api/Users
+        // POST: api/Users - Rejestracja usera
         [HttpPost]
-        public async Task<ActionResult<User>> PostUsers(RegistrationCOM registrationCOM)
+        public async Task<ActionResult<Users>> PostUsers(RegistrationCOM registrationCOM)
         {
             int roleNumber = 0;
 
@@ -115,9 +78,7 @@ namespace fakultet.Controllers
                 roleNumber = 5;
             }
 
-
-
-            User user = new User()
+            Users user = new Users()
             {
                 Id = null,
                 Login = registrationCOM.Login,
@@ -134,7 +95,7 @@ namespace fakultet.Controllers
 
         // DELETE: api/Users/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<User>> DeleteUsers(int id)
+        public async Task<ActionResult<Users>> DeleteUsers(int id)
         {
             var users = await _context.Users.FindAsync(id);
             if (users == null)

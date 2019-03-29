@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace fakultet.Models
 {
-    public class User
+    public class Users
     {
 
         [Key] [Column(TypeName = "int")] public int? Id { get; set; }
