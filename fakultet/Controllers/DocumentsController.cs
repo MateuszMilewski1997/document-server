@@ -108,6 +108,11 @@ namespace fakultet.Controllers
         public async Task<ActionResult<DocumentStatusCOM>> PostDocuments(DocumentsCOM documentsCOM)
         {
 
+            //var date = DateTime.UtcNow;
+            //string gDate ToString(date);
+            DateTime now1 = DateTime.Now;
+            string strDate = now1.ToString();
+
             DocumentStatusCOM document = new DocumentStatusCOM()
             {
                 Id = null,
@@ -117,7 +122,7 @@ namespace fakultet.Controllers
                 Function_author = documentsCOM.Function_author,
                 // Send_Date = documentsCOM.Send_Date,
                 //Send_Date = DateTime.UtcNow,
-                Send_Date =documentsCOM.Send_Date,
+                Send_Date = strDate,
                 Document_Description = documentsCOM.Document_Description,
                 Status = documentsCOM.Status
             };
