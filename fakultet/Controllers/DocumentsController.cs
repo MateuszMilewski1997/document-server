@@ -23,14 +23,14 @@ namespace fakultet.Controllers
 
         // GET: api/Documents  ++
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Documents>>> GetDocuments()
+        public async Task<ActionResult<IEnumerable<DocumentStatusCOM>>> GetDocuments()
         {
             return await _context.Documents.ToListAsync();
         }
 
         // GET: api/Documents/5 ++
         [HttpGet("{id}")]
-        public async Task<ActionResult<Documents>> GetDocuments(int? id)
+        public async Task<ActionResult<DocumentStatusCOM>> GetDocuments(int? id)
         {
             var documents = await _context.Documents.FindAsync(id);
 
@@ -44,9 +44,40 @@ namespace fakultet.Controllers
 
         // PUT: api/Documents/5     ----
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutDocuments(int? id, Documents documents)
+        public async Task<IActionResult> PutDocuments(int? id, DocumentStatusCOM documentStatus)
         {
-            if (id != documents.Id)
+
+            var document = await _context.Documents.FindAsync(id);
+
+            if (document != null)
+            {
+                //document.Name_Doc = document.Name_Doc;
+                //document.User_Mail = document.User_Mail;
+                //document.Type_document = document.Type_document;
+                //document.Function_author = document.Function_author;
+
+                //document.Send_Date = document.Send_Date;
+
+                
+                //contact.FirstName = "Something new";
+                //context.Entry(contact).Property("FirstName").IsModified = true;
+                //context.SaveChanges();
+
+
+               
+                document.Status = documentStatus.Status;
+
+               
+                _context.SaveChanges();
+            }
+            else
+            {
+                return BadRequest("Row not found");
+            }
+
+            return Ok();
+
+            /*if (id != documents.Id)
             {
                 return BadRequest();
             }
@@ -69,22 +100,24 @@ namespace fakultet.Controllers
                 }
             }
 
-            return NoContent();
+            return NoContent();*/
         }
 
         // POST: api/Documents  ==dorobic
         [HttpPost]
-        public async Task<ActionResult<Documents>> PostDocuments(DocumentsCOM documentsCOM)
+        public async Task<ActionResult<DocumentStatusCOM>> PostDocuments(DocumentsCOM documentsCOM)
         {
 
-            Documents document = new Documents()
+            DocumentStatusCOM document = new DocumentStatusCOM()
             {
                 Id = null,
                 Name_Doc = documentsCOM.Name_Doc,
                 User_Mail = documentsCOM.User_Mail,
                 Type_document = documentsCOM.Type_document,
                 Function_author = documentsCOM.Function_author,
-                Send_Date = documentsCOM.Send_Date,
+                // Send_Date = documentsCOM.Send_Date,
+                //Send_Date = DateTime.UtcNow,
+                Send_Date =documentsCOM.Send_Date,
                 Document_Description = documentsCOM.Document_Description,
                 Status = documentsCOM.Status
             };
@@ -106,7 +139,7 @@ namespace fakultet.Controllers
 
         // DELETE: api/Documents/5  ++
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Documents>> DeleteDocuments(int? id)
+        public async Task<ActionResult<DocumentStatusCOM>> DeleteDocuments(int? id)
         {
             var documents = await _context.Documents.FindAsync(id);
             if (documents == null)
