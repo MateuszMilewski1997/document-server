@@ -51,18 +51,7 @@ namespace fakultet.Controllers
 
             if (document != null)
             {
-                //document.Name_Doc = document.Name_Doc;
-                //document.User_Mail = document.User_Mail;
-                //document.Type_document = document.Type_document;
-                //document.Function_author = document.Function_author;
-
-                //document.Send_Date = document.Send_Date;
-
-                
-                //contact.FirstName = "Something new";
-                //context.Entry(contact).Property("FirstName").IsModified = true;
-                //context.SaveChanges();
-
+              
 
                
                 document.Status = documentStatus.Status;
@@ -77,30 +66,6 @@ namespace fakultet.Controllers
 
             return Ok();
 
-            /*if (id != documents.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(documents).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!DocumentsExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();*/
         }
 
         // POST: api/Documents  ==dorobic
@@ -120,8 +85,7 @@ namespace fakultet.Controllers
                 User_Mail = documentsCOM.User_Mail,
                 Type_document = documentsCOM.Type_document,
                 Function_author = documentsCOM.Function_author,
-                // Send_Date = documentsCOM.Send_Date,
-                //Send_Date = DateTime.UtcNow,
+                
                 Send_Date = strDate,
                 Document_Description = documentsCOM.Document_Description,
                 Status = documentsCOM.Status
@@ -129,9 +93,7 @@ namespace fakultet.Controllers
 
 
 
-           // _context.Users.Add(user);
-           // await _context.SaveChangesAsync();
-
+           
            
 
             _context.Documents.Add(document);
