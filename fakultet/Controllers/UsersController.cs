@@ -55,28 +55,20 @@ namespace fakultet.Controllers
         [HttpPost]
         public async Task<ActionResult<Users>> PostUsers(RegistrationCOM registrationCOM)
         {
-            int roleNumber = 0;
+            Roles Role = await _context.Roles.SingleOrDefaultAsync(x => x.Role_Name == registrationCOM.Role);
+            if (Role == null)
+                return BadRequest(new { message = "Role name doesn't exist" });
 
-            if (registrationCOM.Role == "admin")
-            {
-                roleNumber = 1;
-            }
-            else if(registrationCOM.Role == "urzednik")
-            {
-                roleNumber = 2;
-            }
-            else if (registrationCOM.Role == "petent")
-            {
-                roleNumber = 3;
-            }
-            else if (registrationCOM.Role == "skargi")
-            {
-                roleNumber = 4;
-            }
-            else if (registrationCOM.Role == "podania")
-            {
-                roleNumber = 5;
-            }
+            Users UserLogin = await _context.Users.SingleOrDefaultAsync(x => x.Login == registrationCOM.Login);
+            if (UserLogin != null)
+                return BadRequest(new { message = "Login or e-mail exits in databse" });
+
+            Users UserEmail = await _context.Users.SingleOrDefaultAsync(x => x.Email == registrationCOM.Email);
+            if (UserEmail != null)
+                return BadRequest(new { message = "Login or e-mail exits in databse" });
+
+            if (registrationCOM.Password.Length < 8)
+                return BadRequest(new { message = "Password must have minimum 8 characters" });
 
             Users user = new Users()
             {
@@ -84,13 +76,13 @@ namespace fakultet.Controllers
                 Login = registrationCOM.Login,
                 Password = registrationCOM.Password,
                 Email = registrationCOM.Email,
-                Role = roleNumber
+                Role = Role.Id
             };
 
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
-            return Created("User", user);
+            return Created("/account", null);
         }
 
         // DELETE: api/Users/5
