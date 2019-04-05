@@ -24,27 +24,27 @@ namespace fakultet.Controllers
 
         // GET: api/Users - pobieranie całej lisy userów
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<UsersDTO>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<UserListDTO>>> GetUsers()
         {
-            List<UsersDTO> UserDetailsDTO = new List<UsersDTO>();
+            List<UserListDTO> UserDetailsDTO = new List<UserListDTO>();
             var users = await _context.Users.ToListAsync();
 
             foreach (Users user in users)
-                UserDetailsDTO.Add(new UsersDTO(user));
+                UserDetailsDTO.Add(new UserListDTO(user));
 
             return UserDetailsDTO;
         }
 
         // GET: api/Users/5 - pobieranie e-maila i loginu danego usera
         [HttpGet("{id}")]
-        public async Task<ActionResult<UsersDTO>> GetUsers(int id)
+        public async Task<ActionResult<UserListDTO>> GetUsers(int id)
         {
             Users user = await _context.Users.FindAsync(id);
 
             if (user == null)
                 return NotFound();
 
-            UsersDTO usersDTO = new UsersDTO(user)
+            UserListDTO usersDTO = new UserListDTO(user)
             {
                 Login = user.Login,
                 Email = user.Email
