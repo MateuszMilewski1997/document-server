@@ -7,10 +7,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using fakultet.Models;
 using fakultet.Comends;
+using Microsoft.AspNetCore.Cors;
 
 namespace fakultet.Controllers
 {
     [Route("api/[controller]")]
+    [EnableCors("_myAllowSpecificOrigins")]
     [ApiController]
     public class DocumentsController : ControllerBase
     {

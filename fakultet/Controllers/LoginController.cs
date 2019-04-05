@@ -13,10 +13,12 @@ using System.Text;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 using fakultet.DTO;
+using Microsoft.AspNetCore.Cors;
 
 namespace fakultet.Controllers
 {
     [Route("api/[controller]")]
+    [EnableCors("_myAllowSpecificOrigins")]
     [ApiController]
     public class LoginController : ControllerBase
     {

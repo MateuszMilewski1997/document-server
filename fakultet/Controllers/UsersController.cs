@@ -6,10 +6,12 @@ using Microsoft.EntityFrameworkCore;
 using fakultet.Models;
 using fakultet.Comends;
 using fakultet.DTO;
+using Microsoft.AspNetCore.Cors;
 
 namespace fakultet.Controllers
 {
     [Route("api/[controller]")]
+    [EnableCors("_myAllowSpecificOrigins")]
     [ApiController]
     public class UsersController : ControllerBase
     {
