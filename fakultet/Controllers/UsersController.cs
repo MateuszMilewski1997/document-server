@@ -55,7 +55,7 @@ namespace fakultet.Controllers
 
         // POST: api/Users - Rejestracja usera
         [HttpPost]
-        public async Task<ActionResult<Users>> PostUsers(RegistrationCOM registrationCOM)
+        public async Task<ActionResult<Users>> PostUsers([FromBody] RegistrationCOM registrationCOM)
         {
             Roles Role = await _context.Roles.SingleOrDefaultAsync(x => x.Role_Name == registrationCOM.Role);
             if (Role == null)

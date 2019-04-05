@@ -17,7 +17,7 @@ using Microsoft.AspNetCore.Cors;
 
 namespace fakultet.Controllers
 {
-    [Route("api/Logowanie")]
+    [Route("api/[controller]")]
     [EnableCors("_myAllowSpecificOrigins")]
     [ApiController]
     public class LoginController : ControllerBase
@@ -59,7 +59,7 @@ namespace fakultet.Controllers
                 claims: claim
                 );
 
-            LoginDTO usersDTO = new LoginDTO(user, token);
+            LoginDTO usersDTO = new LoginDTO(user, token, Role.Role_Name);
 
             return Ok(usersDTO);
         }
