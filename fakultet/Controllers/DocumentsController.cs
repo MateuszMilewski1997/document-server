@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using fakultet.Models;
 using fakultet.Comends;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace fakultet.Controllers
 {
@@ -46,17 +48,12 @@ namespace fakultet.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutDocuments(int? id, DocumentStatusCOM documentStatus)
         {
-
             var document = await _context.Documents.FindAsync(id);
 
             if (document != null)
             {
-              
-
-               
                 document.Status = documentStatus.Status;
 
-               
                 _context.SaveChanges();
             }
             else
@@ -70,38 +67,38 @@ namespace fakultet.Controllers
 
         // POST: api/Documents  ==dorobic
         [HttpPost]
-        public async Task<ActionResult<DocumentStatusCOM>> PostDocuments(DocumentsCOM documentsCOM)
+        [Authorize]
+        public async Task<ActionResult<IEnumerable<DocumentStatusCOM>>> PostDocuments([FromBody] IEnumerable<DocumentsCOM> documentsCOM)
         {
+            int id = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
 
-            //var date = DateTime.UtcNow;
-            //string gDate ToString(date);
-            DateTime now1 = DateTime.Now;
-            string strDate = now1.ToString();
+            var user = _context.Users.SingleOrDefaultAsync(x => x.Id == id);
 
-            DocumentStatusCOM document = new DocumentStatusCOM()
+            foreach (DocumentsCOM doc in documentsCOM)
             {
-                Id = null,
-                Name_Doc = documentsCOM.Name_Doc,
-                User_Mail = documentsCOM.User_Mail,
-                Type_document = documentsCOM.Type_document,
-                Function_author = documentsCOM.Function_author,
-                
-                Send_Date = strDate,
-                Document_Description = documentsCOM.Document_Description,
-                Status = documentsCOM.Status
-            };
+                DateTime now1 = DateTime.Now;
+                string strDate = now1.ToString();
 
+                DocumentStatusCOM document = new DocumentStatusCOM()
+                {
+                    Id = null,
+                    Name_Doc = doc.Name_Doc,
+                    User_Mail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value,
+                    Type_document = doc.Type_document,
+                    Function_author = doc.Function_author,
 
+                    Send_Date = strDate,
+                    Document_Description = doc.Document_Description,
+                    Status = doc.Status
+                };
 
-           
-           
+                _context.Documents.Add(document);
+            }
 
-            _context.Documents.Add(document);
             await _context.SaveChangesAsync();
 
 
-            return Created("Doc", document);
-            //return CreatedAtAction("GetDocuments", new { id = documentsCOM.Name_Doc }, documentsCOM);
+            return Created("/documents", null);
         }
 
         // DELETE: api/Documents/5  ++
