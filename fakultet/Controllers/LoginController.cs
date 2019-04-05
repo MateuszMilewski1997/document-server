@@ -17,7 +17,7 @@ using Microsoft.AspNetCore.Cors;
 
 namespace fakultet.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/Logowanie")]
     [EnableCors("_myAllowSpecificOrigins")]
     [ApiController]
     public class LoginController : ControllerBase
@@ -30,7 +30,7 @@ namespace fakultet.Controllers
         }
 
         // POST: api/Users - Logowanie
-        [HttpGet]
+        [HttpPost]
         public async Task<ActionResult> GetAccount(LoginCOM loginCOM)
         {
             Users user = await _context.Users.SingleOrDefaultAsync(x =>
