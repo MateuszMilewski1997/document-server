@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using fakultet.Models;
 using fakultet.Comends;
 using Microsoft.AspNetCore.Cors;
 using AutoMapper;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace fakultet.Controllers
 {
@@ -19,11 +19,13 @@ namespace fakultet.Controllers
     {
         private readonly DatabaseContext _context;
         private readonly IMapper _mapper;
+        private readonly IMemoryCache _cache;
 
-        public DocumentsController(DatabaseContext context, IMapper mapper)
+        public DocumentsController(DatabaseContext context, IMapper mapper, IMemoryCache cache)
         {
             _context = context;
             _mapper = mapper;
+            _cache = cache;
         }
 
         // GET: api/Documents  ++
@@ -48,15 +50,21 @@ namespace fakultet.Controllers
         }
 
         [HttpGet("user/{email}")]
-        public async Task<ActionResult<IEnumerable<Documents>>> GetDocumentsByEmail(string email)
+        public async Task<ActionResult<IEnumerable<Documents>>> GetDocumentsByEmail(string email, [FromBody] GetDocumentsCOM key)
         {
 
-            var documents = await _context.Documents.Where(x => x.User_Mail == email).ToListAsync();
+            //var checkKey = _cache.Get<List<string>>("key");
 
-            if (documents == null)
+            var checkKey = _cache.Get<string>("key");
+
+            if (checkKey != null && checkKey.Contains(key.key))
+            {
+                var documents = await _context.Documents.Where(x => x.User_Mail == email).ToListAsync();
+                return documents;
+            }
+                
+            else
                 return NotFound();
-
-            return documents;
         }
 
         // PUT: api/Documents/5     ----
