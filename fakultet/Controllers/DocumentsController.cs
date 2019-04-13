@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using fakultet.Models;
 using fakultet.Comends;
 using Microsoft.AspNetCore.Cors;
+using AutoMapper;
 
 namespace fakultet.Controllers
 {
@@ -17,22 +18,24 @@ namespace fakultet.Controllers
     public class DocumentsController : ControllerBase
     {
         private readonly DatabaseContext _context;
+        private readonly IMapper _mapper;
 
-        public DocumentsController(DatabaseContext context)
+        public DocumentsController(DatabaseContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         // GET: api/Documents  ++
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<DocumentStatusCOM>>> GetDocuments()
+        public async Task<ActionResult<IEnumerable<Documents>>> GetDocuments()
         {
             return await _context.Documents.ToListAsync();
         }
 
         // GET: api/Documents/5 ++
         [HttpGet("{id}")]
-        public async Task<ActionResult<DocumentStatusCOM>> GetDocuments(int? id)
+        public async Task<ActionResult<Documents>> GetDocuments(int? id)
         {
             var documents = await _context.Documents.FindAsync(id);
 
@@ -46,7 +49,7 @@ namespace fakultet.Controllers
 
         // PUT: api/Documents/5     ----
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutDocuments(int? id, DocumentStatusCOM documentStatus)
+        public async Task<IActionResult> PutDocuments(int? id, Documents documentStatus)
         {
 
             var document = await _context.Documents.FindAsync(id);
@@ -72,43 +75,25 @@ namespace fakultet.Controllers
 
         // POST: api/Documents  ==dorobic
         [HttpPost]
-        public async Task<ActionResult<DocumentStatusCOM>> PostDocuments(DocumentsCOM documentsCOM)
+        public async Task<ActionResult<IEnumerable<Documents>>> PostDocuments([FromBody] IEnumerable<DocumentsCOM> documentsCOM)
         {
-
-            //var date = DateTime.UtcNow;
-            //string gDate ToString(date);
             DateTime now1 = DateTime.Now;
             string strDate = now1.ToString();
 
-            DocumentStatusCOM document = new DocumentStatusCOM()
-            {
-                Id = null,
-                Name_Doc = documentsCOM.Name_Doc,
-                User_Mail = documentsCOM.User_Mail,
-                Type_document = documentsCOM.Type_document,
-                Function_author = documentsCOM.Function_author,
-                
-                Send_Date = strDate,
-                Document_Description = documentsCOM.Document_Description,
-                Status = documentsCOM.Status
-            };
+            var documents = _mapper.Map<IEnumerable<Documents>>(documentsCOM);
 
+            foreach(var d in documents)
+                _context.Documents.Add(d);
 
-
-           
-           
-
-            _context.Documents.Add(document);
             await _context.SaveChangesAsync();
 
 
-            return Created("Doc", document);
-            //return CreatedAtAction("GetDocuments", new { id = documentsCOM.Name_Doc }, documentsCOM);
+            return Created("/documents", null);
         }
 
         // DELETE: api/Documents/5  ++
         [HttpDelete("{id}")]
-        public async Task<ActionResult<DocumentStatusCOM>> DeleteDocuments(int? id)
+        public async Task<ActionResult<Documents>> DeleteDocuments(int? id)
         {
             var documents = await _context.Documents.FindAsync(id);
             if (documents == null)

@@ -111,8 +111,6 @@ namespace fakultet.Controllers
 
                 client.Send(msg);
 
-
-
             //-----------------------------------------------------------------------------------
 
             return Created("/account", null);

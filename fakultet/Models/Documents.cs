@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace fakultet.Models
 {
-    public class DocumentStatusCOM
+    public class Documents
     {
 
          [Key] [Column(TypeName = "int")] public int? Id { get; set; }
