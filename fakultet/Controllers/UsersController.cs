@@ -7,6 +7,8 @@ using fakultet.Models;
 using fakultet.Comends;
 using fakultet.DTO;
 using Microsoft.AspNetCore.Cors;
+using System.Net.Mail;
+using System;
 
 namespace fakultet.Controllers
 {
@@ -83,6 +85,35 @@ namespace fakultet.Controllers
 
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
+
+            //-----------------------------------------------------------------------------------
+
+
+            SmtpClient client = new SmtpClient();
+            client.DeliveryMethod = SmtpDeliveryMethod.Network;
+            client.EnableSsl = true;
+            client.Host = "smtp.gmail.com";
+            client.Port = 587;
+
+            // setup Smtp authentication
+            System.Net.NetworkCredential credentials =
+                new System.Net.NetworkCredential("FakultetBillenium@gmail.com", "haslo4321");
+            client.UseDefaultCredentials = false;
+            client.Credentials = credentials;
+
+            MailMessage msg = new MailMessage();
+            msg.From = new MailAddress("FakultetBillenium@gmail.com");
+            msg.To.Add(new MailAddress("milewskimateusz28@gmail.com"));
+
+            msg.Subject = "System zarządzania obiegiem dokumentów";
+            msg.IsBodyHtml = true;
+            msg.Body = string.Format("<html><head></head><body><b>Twoje konto zostało utworzone.</b>   <br/><br/><br/> Wiadomość została wygenerowana automatycznie. Proszę na nią nie odpowiadać.</body>");
+
+                client.Send(msg);
+
+
+
+            //-----------------------------------------------------------------------------------
 
             return Created("/account", null);
         }
