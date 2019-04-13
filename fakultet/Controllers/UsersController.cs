@@ -103,7 +103,10 @@ namespace fakultet.Controllers
 
             MailMessage msg = new MailMessage();
             msg.From = new MailAddress("FakultetBillenium@gmail.com");
+
             msg.To.Add(new MailAddress("milewskimateusz28@gmail.com"));
+            //msg.To.Add(new MailAddress(registrationCOM.Email));
+
 
             msg.Subject = "System zarządzania obiegiem dokumentów";
             msg.IsBodyHtml = true;

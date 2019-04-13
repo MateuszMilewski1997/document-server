@@ -47,6 +47,18 @@ namespace fakultet.Controllers
             return documents;
         }
 
+        [HttpGet("user/{email}")]
+        public async Task<ActionResult<IEnumerable<Documents>>> GetDocumentsByEmail(string email)
+        {
+
+            var documents = await _context.Documents.Where(x => x.User_Mail == email).ToListAsync();
+
+            if (documents == null)
+                return NotFound();
+
+            return documents;
+        }
+
         // PUT: api/Documents/5     ----
         [HttpPut("{id}")]
         public async Task<IActionResult> PutDocuments(int? id, Documents documentStatus)
@@ -56,11 +68,7 @@ namespace fakultet.Controllers
 
             if (document != null)
             {
-              
-
-               
                 document.Status = documentStatus.Status;
-
                
                 _context.SaveChanges();
             }
@@ -86,7 +94,6 @@ namespace fakultet.Controllers
                 _context.Documents.Add(d);
 
             await _context.SaveChangesAsync();
-
 
             return Created("/documents", null);
         }
