@@ -32,6 +32,7 @@ namespace fakultet
         public void ConfigureServices(IServiceCollection services)
         {
 
+            services.AddAuthorization(x => x.AddPolicy("urzednik", p => p.RequireRole("urzednik")));
             services.AddMemoryCache();
 
 
@@ -78,6 +79,7 @@ namespace fakultet
 
             app.UseCors(MyAllowSpecificOrigins);
             app.UseHttpsRedirection();
+            app.UseAuthentication();
             app.UseMvc();
         }
     }
