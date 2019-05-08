@@ -15,6 +15,7 @@ namespace fakultet.Models
          [Column(TypeName = "varchar(500)")] public string Document_Description { get; set; }
          [Column(TypeName = "varchar(60)")] public string Status { get; set; }
          [Column(TypeName = "nvarchar(MAX)")] public string Comment { get; set; }
+         [Column(TypeName = "nvarchar(MAX)")] public string Url { get; set; }
 
     }
 }
