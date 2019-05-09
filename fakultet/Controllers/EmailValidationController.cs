@@ -51,9 +51,6 @@ namespace fakultet.Controllers
                 string key = new String(stringChars);
 
                 _cache.Set("key", key, TimeSpan.FromMinutes(180));
-
-
-
                 SmtpClient client = new SmtpClient();
                 client.DeliveryMethod = SmtpDeliveryMethod.Network;
                 client.EnableSsl = true;

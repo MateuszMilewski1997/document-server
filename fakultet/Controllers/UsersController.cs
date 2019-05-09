@@ -139,10 +139,34 @@ namespace fakultet.Controllers
         {
             return _context.Users.Any(e => e.Id == id);
         }
+
+        
+        [HttpPut("EditUser/{id}")]
+        public async Task<IActionResult> PutDocuments(int? id, EditRoleCOM EditRole)
+        {
+            var user = await _context.Users.FindAsync(id);
+
+            int newRole = EditRole.Role;
+
+            //Documents dokument = new Documents();
+
+            if (user != null)
+            {
+                user.Role = newRole;
+
+                _context.Update(user);
+                _context.SaveChanges();
+            }
+
+
+
+            return NoContent();
+        }
+
     }
 
-
     
+
 
 
 }
